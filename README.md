@@ -125,28 +125,28 @@ The live demo is non-working, as the Infura API key has been removed for securit
 ### Usage
 1. **Visit the dApp**: Open `https://localhost:3000` (local) 
 2. **Configure Parent-Teen Relationship**:
-   - Navigate to the “Add Parent-Teen Relationship” page (`addParent2Teen.html`) via a link on the main page.
-   - Connect MetaMask Flask with the parent wallet (`0x86110B44E8580905749Eea2A972D15704A914cE5`).
-   - Enter the parent wallet address (e.g., `0x86110B44...`) and teen wallet address (e.g., `0x3674473C7BDAf922f68a0232509049aBD37Da7A9`).
-   - Click “AddParent” to execute `addParent` and link the wallets.
+   - Navigate to the “Configure a new wallet as parent of a teen” page (`addParent2Teen.html`) via the link on the main index page.
+   - Connect MetaMask Flask with the parent wallet `0x<ParentsWalletAddress>`
+   - Enter the parent wallet address  and teen wallet address 
+   - Click “AddParent” to execute `addParent` function in the contract and link the wallets.
 3. **Choose Token**:
    - Navigate to TST (`useTSTtokens.html`) or PYUSD (`usePYUSDtokens.html`) page.
 4. **Parent Actions (TST Page)**:
-   - Set teen address (e.g., `0x3674473C...`), weekly amount (e.g., 100 TST), and spending cap (e.g., 400 TST).
+   - Set teen address , weekly amount (e.g., 100 TST), and spending cap (e.g., 400 TST).
    - Click “Configure Allowance”.
    - Transfer tokens (e.g., 50 TST) via “Transfer TST to Teen”.
 5. **Teen Actions**:
-   - Connect teen wallet (`0x3674473C...`).
+   - Connect teen wallet .
    - View balance and spend allowance (e.g., 25 TST in “Education”).
 6. **Verify Transactions**: Check on [Sepolia Etherscan](https://sepolia.etherscan.io/).
 
 ## Testing
 - **Test Wallets**:
-  - Parent: `0x86110B44E8580905749Eea2A972D15704A914cE5`
-  - Teen: `0x3674473C7BDAf922f68a0232509049aBD37Da7A9`
+  - Parent: `0x<ParentsWalletAddress>`
+  - Teen: `0x<TeensWalletAddress>`
 - **Steps**:
   1. Ensure wallets have Sepolia ETH and TST/PYUSD tokens.
-  2. On `addParent2Teen.html`, connect parent wallet, enter parent (`0x86110B44...`) and teen (`0x3674473C...`) addresses, and execute `addParent`.
+  2. On `Configure a new wallet as parent of a teen, connect parent wallet, enter Parent and Teen addresses, and execute `addParent`.
   3. Configure allowance (100 TST weekly, 400 TST cap).
   4. Transfer 50 TST to teen.
   5. Spend 25 TST as teen in a category.
