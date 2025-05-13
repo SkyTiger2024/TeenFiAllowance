@@ -39,6 +39,9 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
 ## Solution
 - **Contract**: `0x2161e095ec52d9B02AdeADFe6cE2A07deF17FF95` (full) or `0x4a631b162D58756C2568F03744d63037Bd4348d9` (POC).
 - **MockDelegationManager**: `0xD464A84c5ed04d34B0431464c173b782ae5602F6`.
+- **ERC20StreamingEnforcer) (_caveatEnforcer)**      0x56c97aE02f233B29fa03502Ecc0457266d9be00e
+- **MockActionsContract (_actionsContract)**:    0x3A4A2B75FA0e9c8dB60bC92A6B0616A3b473def6
+- **MockStreamingContract (_streamingContract)**:   0x65e302187f01745Eb8D9bc44CDC361f68d3339d7
 - **Test ERC-20 Tokens**:
   - TST: `0x1230591e26044F0AA562c24b4d7Fd002b227E69c`
   - PYUSD: `0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9`
