@@ -116,7 +116,17 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
 - Gasless Transactions: ERC-4337 user operations with a paymaster cover gas fees, enhancing teen accessibility
 
 
-## Contract Deployment and Testing
+## Contract Deployments and Testing
+### Contract Deployment Settings:
+- **Script**: `DeployTeenFiAllowance.s.sol`
+- **Parameters**:
+  - `_delegationManager`: `0xdb9B1e94...`
+  - `_caveatEnforcer`: `0x56c97aE0...`
+  - `_actionsContract`: `0x3A4A2B75...`
+  - `_streamingContract`: `0x65e30218...`
+- **Network**: Sepolia
+- 
+### Contract Deployment Steps:
 1. **Clone Repository**:
    ```bash
    git clone [Repo URL]
@@ -126,42 +136,83 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
 2. **Setup**:
    - Install MetaMask Flask, enable Snaps.[](https://metamask.io/news/hacker-guide-metamask-delegation-toolkit-erc-7715-actions)
    - Set Sepolia RPC in `.env`.
-3. **Run Tests**:
+3.**Deploy MockActions & MockStreaming Contracts**:
+   ```forge script script\DeployMocks.s.sol --rpc-url https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4 --private-key 0x<YOUR_PRIVATE_KEY> --broadcast
+
+_actionsContract: 0x234202b7EEC7B243fc854c865EAab181B91575D8,
+_streamingContract: 0x65e302187f01745Eb8D9bc44CDC361f68d3339d7```
+   
+4. **Verify Mock Contracts on Sepolia Etherscan**:
+   ```forge verify-contract <ACTIONS_CONTRACT_ADDRESS> src/MockActionsContract.sol:MockActionsContract --chain-id 11155111
+forge verify-contract <STREAMING_CONTRACT_ADDRESS> src/MockStreamingContract.sol:MockStreamingContract --chain-id 11155111```
+
+5. **Deploy the MockDelegationManager**:
+   `forge script script/DeployMockDelegationManager.s.sol --rpc-url https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4 --private-key (key) --broadcast
+
+== Logs ==
+  MockDelegationManager deployed to: 0x<MockDelegationManagerAddress>`
+   
+6. **Update DeployTeenFiAllowance.s.sol with Mock Addresses**:
+    `TeenFiAllowance teenFiAllowance = new TeenFiAllowance(
+      0xD464A84c5ed04d34B0431464c173b782ae5602F6, // _delegationManager (MockDelegationManager)
+      0x56c97aE02f233B29fa03502Ecc0457266d9be00e, // _caveatEnforcer (ERC20StreamingEnforcer)
+      0x3A4A2B75FA0e9c8dB60bC92A6B0616A3b473def6, // _actionsContract (MockActionsContract)
+      0x65e302187f01745Eb8D9bc44CDC361f68d3339d7 // _streamingContract (MockStreamingContract)`
+
+7. **Deploy the TeenFiAllowance Contract**:
+    `forge script script/DeployTeenFiAllowance.s.sol --rpc-url https://sepolia.infura.io/v3/<APIKEY> --private-key (key) --broadcast`
+   Note down contract addres:     TeenFiAllowance deployed to: 0x<TeenFiAllownaceContractAddress>
+
+8. **Verify TeenFiAllowance Contract on Etherscan**:
+`forge flatten src/TeenFiAllowance.sol > FlatTeenFiAllowance.sol`
+Slect Single Solidity file, and paste this contents.
+
+9.  **Update script/TestTeenFi.s.sol with Contract Address**:
+    ```address constant TEENFI_ADDRESS = 0x<TeenFiAllownaceContractAddress>;```
+
+10.  **Run Tests**:
    ```bash
-   forge script script/TestTeenFi.s.sol --rpc-url https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4 --private-key [YOUR_PRIVATE_KEY] --broadcast
+   forge script script/TestTeenFi.s.sol --rpc-url https://sepolia.infura.io/v3/<APIKEY> --private-key [YOUR_PRIVATE_KEY] --broadcast
+
+== Logs ==
+  Registering parent for teen...
+  Parent registered
+  Approving TeenFiAllowance for configureAllowance...
+  Approval successful
+  Calling configureAllowance...
+  configureAllowance successful
+  Verifying delegation...
+  Delegation status: true
+  Calling modifyAllowance...
+  modifyAllowance successful
    ```
-4. **Run dApp**:
+
+11. **Run dApp**:
    ```bash
    npm run dev
    ```
-5. **Query Contract**:
+
+12. **Query Contract**:
    - Get parents:
      ```bash
-     cast call 0x724e4fbe886aC69AE6E4866de4D53639b3723BED "getParents(address)(address[])" 0xfFF8f28f6E86C72FB3c11003dC6c3a05E9ea3E91 --rpc-url https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4
+     cast call 0x724e4fbe886aC69AE6E4866de4D53639b3723BED "getParents(address)(address[])" 0xfFF8f28f6E86C72FB3c11003dC6c3a05E9ea3E91 --rpc-url https://sepolia.infura.io/v3/<APIKEY>
      ```
    - Get allowance:
      ```bash
      cast call 0x724e4fbe886aC69AE6E4866de4D53639b3723BED "parentTeenAllowances(address,address)(address,uint256,uint256,uint256,bool,uint256)" 0xbB81ae1ca1f3a47fA5CA0A3a44Cd1b195Df65B38 0xfFF8f28f6E86C72FB3c11003dC6c3a05E9ea3E91 --rpc-url https://sepolia.infura.io/v3/生まれ
      ```
-6. **View Events**: https://sepolia.etherscan.io/address/0x724e4fbe886aC69AE6E4866de4D53639b3723BED#events
+13. **View Events**: https://sepolia.etherscan.io/address/0x724e4fbe886aC69AE6E4866de4D53639b3723BED#events
 
-7. **Run Contract Tests**:
+14. **Run Contract Tests**:
    ```bash
    forge script script/TestTeenFi.s.sol --rpc-url https://sepolia.infura.io/v3/[YOUR_INFURA_KEY] --private-key [YOUR_PRIVATE_KEY] --broadcast
    ```
-8. **Set Parent-Teen Relationship**:
+15. **Set Parent-Teen Relationship**:
    ```bash
    cast send 0x4a631b162D58756C2568F03744d63037Bd4348d9 "addParent(address,address)" 0x86110B44E8580905749Eea2A972D15704A914cE5 0x3674473C7BDAf922f68a0232509049aBD37Da7A9 --rpc-url https://sepolia.infura.io/v3/[YOUR_INFURA_KEY] --private-key [DEVAC_PRIVATE_KEY]
    ```
 
-### Contract Deployment
-- **Script**: `DeployTeenFiAllowance.s.sol`
-- **Parameters**:
-  - `_delegationManager`: `0xdb9B1e94...`
-  - `_caveatEnforcer`: `0x56c97aE0...`
-  - `_actionsContract`: `0x3A4A2B75...`
-  - `_streamingContract`: `0x65e30218...`
-- **Network**: Sepolia
+
 
 
 ## Front-End Setup Instructions
