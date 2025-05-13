@@ -97,6 +97,12 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
   - Decimals: 18
   - Not been verified on [Sepolia Etherscan](https://sepolia.etherscan.io/address/0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9).
 
+**Etherscan Links**:
+ - TeenFiAllowance: [https://sepolia.etherscan.io/address/0xC77223d1bDEa392Da996E6f9a4aab174fc3aD71F](https://sepolia.etherscan.io/address/0xC77223d1bDEa392Da996E6f9a4aab174fc3aD71F)
+ - MockActionsContract: [https://sepolia.etherscan.io/address/0x3A4A2B75FA0e9c8dB60bC92A6B0616A3b473def6](https://sepolia.etherscan.io/address/0x3A4A2B75FA0e9c8dB60bC92A6B0616A3b473def6)
+ - MockStreamingContract: [https://sepolia.etherscan.io/address/0x65e302187f01745Eb8D9bc44CDC361f68d3339d7](https://sepolia.etherscan.io/address/0x65e302187f01745Eb8D9bc44CDC361f68d3339d7)
+- TestToken: [https://sepolia.etherscan.io/address/0x1230591e26044F0AA562c24b4d7Fd002b227E69c](https://sepolia.etherscan.io/address/0x1230591e26044F0AA562c24b4d7Fd002b227E69c)
+        - 
 ## Innovation and Impact
 - **Innovation**: Family-oriented Web3 with dual-token support.
 - **Impact**: Simplifies Web3 for non-technical users.
@@ -105,6 +111,8 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
 ## Challenges and Solutions
 - **Challenge**: Contract revert ("Caller is not a parent of the teen").
   - **Solution**: Called `addParent`.
+- **Challenge**: Could not get the Delegation Framework to install and work
+  - **Solution**: Created the MockDelegationManager
 - **Challenge**: Contract revert ("Delegation terms cannot be empty").
   - **Solution**: Set `delegationTerms` to `0x1234`.
 - **Challenge**: `teenBalances` timeout.
