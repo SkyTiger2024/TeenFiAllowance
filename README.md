@@ -161,7 +161,7 @@ The live demo is non-working, as the Infura API key has been removed for securit
 - Open a pull request.
 
 ## License
-MIT License. See `LICENSE` for details.
+MIT License. See [LICENSE](https://github.com/SkyTiger2024/TeenFiAllowance/blob/main/LICENSE) for details.
 
 ## Contact
 - **Email**: [info@skytiger.tech](mailto:info@skytiger.tech)
