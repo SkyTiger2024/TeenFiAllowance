@@ -146,7 +146,7 @@ The live demo is non-working, as the Infura API key has been removed for securit
   - Teen: `0x<TeensWalletAddress>`
 - **Steps**:
   1. Ensure wallets have Sepolia ETH and TST/PYUSD tokens.
-  2. On `Configure a new wallet as parent of a teen, connect parent wallet, enter Parent and Teen addresses, and execute `addParent`.
+  2. On `Configure a new wallet as parent of a teen`, connect parent wallet, enter Parent and Teen addresses, and execute `addParent`.
   3. Configure allowance (100 TST weekly, 400 TST cap).
   4. Transfer 50 TST to teen.
   5. Spend 25 TST as teen in a category.
