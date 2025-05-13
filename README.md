@@ -140,14 +140,22 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
 1. **Clone Repository**:
    ```bash
    git clone [[Repo URL]](https://github.com/SkyTiger2024/TeenFiAllowance.git)
-   cd TeenFiAllowance
-   forge install
+   cd TeenFiAllowance/TeenFi
+   npm install
    ```
+2. **Install Dependencies**:
+   Using Node.JS 22.13.0
+   npm install yarn pnpm
+   npm install metamask/delegation-toolkit
+   forge install  install metamask/delegation-framework@v1.3.0 --no-commit
+   forge install
+   create .yarnmc.yml
+   create .npmrc
 2. **Setup**:
    - Install MetaMask Flask, enable Snaps.[](https://metamask.io/news/hacker-guide-metamask-delegation-toolkit-erc-7715-actions)
    - Set Sepolia RPC in `.env`.
 3.**Deploy MockActions & MockStreaming Contracts**:
-   ```forge script script\DeployMocks.s.sol --rpc-url https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4 --private-key 0x<YOUR_PRIVATE_KEY> --broadcast
+   ```forge script script\DeployMocks.s.sol --rpc-url https://sepolia.infura.io/v3/<APIKEY> --private-key 0x<YOUR_PRIVATE_KEY> --broadcast
 
 _actionsContract: 0x234202b7EEC7B243fc854c865EAab181B91575D8,
 _streamingContract: 0x65e302187f01745Eb8D9bc44CDC361f68d3339d7```
