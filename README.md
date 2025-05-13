@@ -57,7 +57,7 @@ The live demo is non-working, as the Infura API key has been removed for securit
   - Decimals: 18
   - Verified on [Sepolia Etherscan](https://sepolia.etherscan.io/address/0x1230591e26044F0AA562c24b4d7Fd002b227E69c).
 - **PYUSD Token (PayPal USD)**:
-  - Address: `0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9` (pending confirmation)
+  - Address: `0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9` 
   - Decimals: 18
   - Verified on [Sepolia Etherscan](https://sepolia.etherscan.io/address/0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9).
 
