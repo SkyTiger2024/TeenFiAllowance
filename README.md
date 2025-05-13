@@ -35,7 +35,7 @@ The live demo is non-working, as the Infura API key has been removed for securit
 ### Blockchain
 - **Solidity**: Smart contracts (TeenFiAllowance, TST).
 - **Sepolia Testnet**: Ethereum test network (chain ID: `0xaa36a7`).
-- **Infura RPC**: `https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4`.
+- **Infura RPC**: `https://sepolia.infura.io/v3/<API-KEY>`.
 - **Hardhat/Foundry**: Contract deployment tools.
 - **ERC-20**: Standard for TST and PYUSD tokens.
 
