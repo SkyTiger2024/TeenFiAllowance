@@ -52,7 +52,6 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
 - **Front-End**: Homepage with TST/PYUSD links, served over HTTPS.
 - **Functions**: `configureAllowance`, `spendAllowance`, `createStreamingAllowance`, `addParent`.
 
-- 
 ## Technical Details
 - **Standards**: ERC-7715, ERC-7710, ERC-20.
 - **Dependencies**: OpenZeppelin, Viem (ESM).
