@@ -1,0 +1,491 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TeenFiAllowance POC - PYUSD</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1 { text-align: center; margin-bottom: 20px; }
+    p { max-width: 800px; margin: 0 auto 10px; line-height: 1.5; text-align: center; }
+    .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+    .error { color: red; }
+    .success { color: green; }
+    input, select, button { margin: 5px; padding: 8px; font-size: 14px; }
+    button { cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; padding: 10px 20px; }
+    button:hover { background-color: #0056b3; }
+    #disconnect-wallet { background-color: #dc3545; }
+    #disconnect-wallet:hover { background-color: #c82333; }
+    #back-button { background-color: #6c757d; }
+    #back-button:hover { background-color: #5a6268; }
+    #get-token-balance { background-color: #28a745; }
+    #get-token-balance:hover { background-color: #218838; }
+    h2 { margin: 0 0 8px; font-size: 1.5em; }
+    label { margin: 5px 0; font-weight: bold; }
+    .input-group { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+    .teen-address { margin-bottom: 5px; }
+    .teen-address input { width: 100%; box-sizing: border-box; }
+    .action-group { display: flex; align-items: center; gap: 5px; }
+    .wallet-info { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .wallet-buttons { display: flex; gap: 10px; }
+    #token-balance { margin-left: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>TeenFiAllowance POC - PYUSD</h1>
+  <p>This page allows parents to configure a weekly allowance for teens using Sepolia PYUSD on the Sepolia testnet. Teens can connect their wallet to view and spend their allowance within approved categories, such as Education or Entertainment. For testing, spent tokens are sent to the parent.</p>
+  <div id="wallet-status">Wallet: Not Connected</div>
+  <div id="wallet-message"></div>
+  <div class="wallet-info">
+    <div class="wallet-buttons">
+      <button id="connect-wallet">Connect MetaMask Flask</button>
+      <button id="disconnect-wallet">Disconnect Wallet</button>
+      <button id="back-button">Back</button>
+      <button id="get-token-balance">Get PYUSD Token Balance</button>
+    </div>
+    <div id="token-balance">Token Balance: 0 PYUSD</div>
+  </div>
+
+  <div class="section">
+    <h2>Parent: Set Up Teen’s Allowance</h2>
+    <p>Sets the weekly allowance and total spending cap. Tokens are distributed separately.</p>
+    <div class="teen-address">
+      <label for="teen-address">Teen’s Wallet Address</label>
+      <input id="teen-address" type="text" placeholder="Teen Address (0x...)" value="0x3674473C7BDAf922f68a0232509049aBD37Da7A9" size="42">
+    </div>
+    <div class="input-group">
+      <div>
+        <label for="weekly-amount">Weekly Allowance Amount (PYUSD)</label>
+        <input id="weekly-amount" type="number" placeholder="Weekly Amount (PYUSD)" value="50">
+      </div>
+      <div>
+        <label for="spending-cap">Total Spending Cap (PYUSD)</label>
+        <input id="spending-cap" type="number" placeholder="Spending Cap (PYUSD)" value="200">
+      </div>
+    </div>
+    <div class="action-group">
+      <button id="configure-allowance">Configure Allowance</button>
+      <div id="parent-message"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Parent: Transfer Tokens to Teen</h2>
+    <p>Transfer weekly allowance (or other amount for testing).</p>
+    <div class="input-group">
+      <div>
+        <label for="transfer-amount">Amount to Transfer (PYUSD)</label>
+        <input id="transfer-amount" type="number" placeholder="Amount to Transfer (PYUSD)" value="50">
+      </div>
+    </div>
+    <div class="action-group">
+      <button id="transfer-pyusd">Transfer PYUSD to Teen</button>
+      <div id="transfer-message"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Teen: Spend Your Allowance</h2>
+    <p>Spends tokens on a category, sending them to the parent for testing.</p>
+    <div id="teen-balance">Balance: 0 PYUSD</div>
+    <div class="input-group">
+      <div>
+        <label for="spend-amount">Amount to Spend (PYUSD)</label>
+        <input id="spend-amount" type="number" placeholder="Amount to Spend (PYUSD)" value="25">
+      </div>
+      <div>
+        <label for="category">Spending Category</label>
+        <select id="category">
+          <option value="0">Education</option>
+          <option value="1">Entertainment</option>
+          <option value="2">Savings</option>
+          <option value="3">Food</option>
+        </select>
+      </div>
+    </div>
+    <button id="spend-allowance">Spend Allowance</button>
+    <div id="teen-message"></div>
+  </div>
+
+  <script type="module">
+    import * as viem from 'https://cdn.jsdelivr.net/npm/viem@2.21.25/+esm';
+    console.log('Viem loaded:', viem);
+    window.viem = viem;
+
+    const contractAddress = '0x4a631b162D58756C2568F03744d63037Bd4348d9';
+    const tokenAddress = '0xCaC524BcA292aaade2DF8A05cC58F0a65B1B3bB9'; // PYUSD
+    const parentAddress = '0x86110B44E8580905749Eea2A972D15704A914cE5';
+    const erc20Abi = [
+      {
+        "inputs": [
+          {"name": "to", "type": "address"},
+          {"name": "amount", "type": "uint256"}
+        ],
+        "name": "transfer",
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{"name": "account", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ];
+    const abi = [
+      {
+        "inputs": [
+          {"name": "teen", "type": "address"},
+          {"name": "token", "type": "address"},
+          {"name": "weeklyAmount", "type": "uint256"},
+          {"name": "spendingCap", "type": "uint256"},
+          {"name": "delegationTerms", "type": "bytes"}
+        ],
+        "name": "configureAllowance",
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {"name": "parent", "type": "address"},
+          {"name": "amount", "type": "uint256"},
+          {"name": "category", "type": "uint8"}
+        ],
+        "name": "spendAllowance",
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [{"name": "", "type": "address"}],
+        "name": "teenBalances",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ];
+
+    const client = viem.createPublicClient({
+      chain: {
+        id: 11155111,
+        name: 'Sepolia',
+        network: 'sepolia',
+        nativeCurrency: { name: 'Sepolia ETH', symbol: 'SEP', decimals: 18 },
+        rpcUrls: { default: { http: ['https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4'] } }
+      },
+      transport: viem.http()
+    });
+
+    let walletClient;
+    let account;
+
+    document.getElementById('connect-wallet').addEventListener('click', async () => {
+      try {
+        if (!window.ethereum) {
+          showMessage('wallet', 'MetaMask Flask not detected. Please install MetaMask Flask.', false);
+          return;
+        }
+        if (!window.viem) {
+          showMessage('wallet', 'Viem library not loaded. Please check your network and refresh.', false);
+          console.error('Viem not loaded');
+          return;
+        }
+        try {
+          await window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: '0xaa36a7' }],
+          });
+        } catch (switchError) {
+          if (switchError.code === 4902) {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [{
+                chainId: '0xaa36a7',
+                chainName: 'Sepolia',
+                rpcUrls: ['https://sepolia.infura.io/v3/68be52d1c6a64ef3b9d7ae3401415bd4'],
+                nativeCurrency: { name: 'Sepolia ETH', symbol: 'SEP', decimals: 18 },
+                blockExplorerUrls: ['https://sepolia.etherscan.io']
+              }]
+            });
+          } else {
+            throw switchError;
+          }
+        }
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        account = viem.getAddress(accounts[0]);
+        walletClient = viem.createWalletClient({
+          account,
+          chain: client.chain,
+          transport: viem.custom(window.ethereum)
+        });
+        document.getElementById('wallet-status').textContent = `Wallet: ${account}`;
+        showMessage('wallet', 'Wallet connected successfully!', true);
+        updateTeenBalance();
+      } catch (error) {
+        showMessage('wallet', `Connect error: ${error.message}`, false);
+      }
+    });
+
+    document.getElementById('disconnect-wallet').addEventListener('click', async () => {
+      try {
+        walletClient = null;
+        account = null;
+        document.getElementById('wallet-status').textContent = 'Wallet: Not Connected';
+        document.getElementById('token-balance').textContent = 'Token Balance: 0 PYUSD';
+        showMessage('wallet', 'Wallet disconnected. Please reconnect.', true);
+      } catch (error) {
+        showMessage('wallet', `Disconnect error: ${error.message}`, false);
+      }
+    });
+
+    document.getElementById('back-button').addEventListener('click', () => {
+      window.location.href = '/';
+    });
+
+    document.getElementById('get-token-balance').addEventListener('click', async () => {
+      if (!walletClient || !account) {
+        showMessage('wallet', 'Please connect wallet', false);
+        return;
+      }
+      try {
+        const balance = await client.readContract({
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: 'balanceOf',
+          args: [account]
+        });
+        document.getElementById('token-balance').textContent = `Token Balance: ${Number(balance) / 10**6} PYUSD`;
+        showMessage('wallet', 'Token balance updated!', true);
+      } catch (error) {
+        showMessage('wallet', `Balance error: ${error.message}`, false);
+      }
+    });
+
+    document.getElementById('configure-allowance').addEventListener('click', async () => {
+      if (!walletClient || !account) {
+        showMessage('parent', 'Please connect wallet', false);
+        return;
+      }
+      const teenAddress = document.getElementById('teen-address').value;
+      const weeklyAmount = document.getElementById('weekly-amount').value;
+      const spendingCap = document.getElementById('spending-cap').value;
+
+      if (!viem.isAddress(teenAddress)) {
+        showMessage('parent', 'Invalid teen address', false);
+        return;
+      }
+      if (!weeklyAmount || !spendingCap || weeklyAmount <= 0 || spendingCap <= weeklyAmount) {
+        showMessage('parent', 'Invalid amount or cap', false);
+        return;
+      }
+
+      try {
+        const delegationTerms = '0x1234';
+        const hash = await walletClient.writeContract({
+          address: contractAddress,
+          abi,
+          functionName: 'configureAllowance',
+          args: [
+            teenAddress,
+            tokenAddress,
+            BigInt(weeklyAmount) * BigInt(10**6),
+            BigInt(spendingCap) * BigInt(10**6),
+            delegationTerms
+          ],
+          gas: 200000
+        });
+        await client.waitForTransactionReceipt({ hash });
+        showMessage('parent', 'Allowance configured! Use "Transfer PYUSD" or distributeAllowance to send tokens.', true);
+      } catch (error) {
+        showMessage('parent', `Error: ${error.message}`, false);
+      }
+    });
+
+    document.getElementById('transfer-pyusd').addEventListener('click', async () => {
+      if (!walletClient || !account) {
+        showMessage('transfer', 'Please connect wallet', false);
+        return;
+      }
+      const teenAddress = document.getElementById('teen-address').value;
+      const amount = document.getElementById('transfer-amount').value;
+
+      if (!viem.isAddress(teenAddress)) {
+        showMessage('transfer', 'Invalid teen address', false);
+        return;
+      }
+      if (!amount || amount <= 0) {
+        showMessage('transfer', 'Invalid transfer amount', false);
+        return;
+      }
+
+      try {
+        const hash = await walletClient.writeContract({
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: 'transfer',
+          args: [teenAddress, BigInt(amount) * BigInt(10**6)],
+          gas: 100000
+        });
+        await client.waitForTransactionReceipt({ hash });
+        showMessage('transfer', `Transferred ${amount} PYUSD to teen!`, true);
+      } catch (error) {
+        showMessage('transfer', `Transfer error: ${error.message}`, false);
+      }
+    });
+
+    document.getElementById('spend-allowance').addEventListener('click', async () => {
+      if (!walletClient || !account) {
+        showMessage('teen', 'Please connect wallet', false);
+        return;
+      }
+      const amount = document.getElementById('spend-amount').value;
+      const category = document.getElementById('category').value;
+
+      if (!amount || amount <= 0) {
+        showMessage('teen', 'Invalid amount', false);
+        return;
+      }
+
+      try {
+        const spendHash = await walletClient.writeContract({
+          address: contractAddress,
+          abi,
+          functionName: 'spendAllowance',
+          args: [parentAddress, BigInt(amount) * BigInt(10**6), Number(category)],
+          gas: 200000
+        });
+        await client.waitForTransactionReceipt({ hash: spendHash });
+
+        const transferHash = await walletClient.writeContract({
+          address: tokenAddress,
+          abi: erc20Abi,
+          functionName: 'transfer',
+          args: [parentAddress, BigInt(amount) * BigInt(10**6)],
+          gas: 100000
+        });
+        await client.waitForTransactionReceipt({ hash: transferHash });
+
+        showMessage('teen', `Spent ${amount} PYUSD to parent (category ${category})!`, true);
+        updateTeenBalance();
+      } catch (error) {
+        showMessage('teen', `Error: ${error.message}`, false);
+      }
+    });
+
+    async function updateTeenBalance() {
+      if (!account) return;
+      const maxRetries = 3;
+      let attempt = 0;
+
+      while (attempt < maxRetries) {
+        try {
+          const balance = await client.readContract({
+            address: contractAddress,
+            abi,
+            functionName: 'teenBalances',
+            args: [account]
+          });
+          document.getElementById('teen-balance').textContent = `Balance: ${Number(balance) / 10**6} PYUSD`;
+          return;
+        } catch (error) {
+          attempt++;
+          if (attempt === maxRetries) {
+            showMessage('teen', `Balance error: ${error.message}`, false);
+          }
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+      }
+    }
+
+    function showMessage(section, message, isSuccess) {
+      const element = document.getElementById(`${section}-message`);
+      if (element) {
+        element.textContent = message;
+        element.className = isSuccess ? 'success' : 'error';
+      } else {
+        console.error(`Element with ID ${section}-message not found`);
+      }
+    }
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'93d4a02aec07afa1',t:'MTc0NjgyOTY2MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
+</html>
