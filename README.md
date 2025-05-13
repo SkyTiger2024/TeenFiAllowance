@@ -139,8 +139,8 @@ Traditional allowances lack automation, and Web3 dApps require complex approvals
 ### Contract Deployment Steps:
 1. **Clone Repository**:
    ```bash
-   git clone [Repo URL]
-   cd teenfi-allowance
+   git clone [[Repo URL]](https://github.com/SkyTiger2024/TeenFiAllowance.git)
+   cd TeenFiAllowance
    forge install
    ```
 2. **Setup**:
