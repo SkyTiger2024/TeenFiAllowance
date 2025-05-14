@@ -33,7 +33,14 @@ Aligns with **Track 1: Best Use of ERC-7715 Actions** by implementing `redeemDel
   - Built with Bootstrap 5 and custom CSS for mobile and desktop compatibility.
 
 ## Problem Statement
-Traditional allowances lack automation, and Web3 dApps require complex approvals.
+Traditional allowances lack automation, and Web3 dApps require complex approvals. TeenFiAllowance automates payments and delegates spending with a simple UX.
+
+Revolut allows parents to create an account and card for their teenagers, and then transfer funds over to it. 
+
+They can also view the transactions, however there is no control over their spending.
+
+With the recent release of the MetaMask credit card, the delegation toolkit offers possibilities for setting spending caps on the teenagers funds.
+
 **TeenFiAllowance** automates payments and delegates spending with a simple UX.
 
 ## Solution
