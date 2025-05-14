@@ -352,3 +352,4 @@ MIT License. See [LICENSE](https://github.com/SkyTiger2024/TeenFiAllowance/blob/
 - **Email**: [info@skytiger.tech](mailto:info@skytiger.tech)
 - **X**: [@SkyTigerTech](https://x.com/SkyTigerTech)
 - **Instagram**: [soratora2024](https://www.instagram.com/soratora2024/)
+- **YouTube**: [SkyTiger](https://www.youtube.com/playlist?list=PLvDB1ab-QV3sGbdx_mbsVpVLwEfO8TYAc)
