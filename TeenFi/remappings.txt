@@ -1,0 +1,3 @@
+@openzeppelin/=lib/openzeppelin-contracts/
+@metamask/delegation-framework/=lib/delegation-framework/
+@forge-std/=lib/forge-std/src/
