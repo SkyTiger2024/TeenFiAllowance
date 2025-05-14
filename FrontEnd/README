@@ -1,0 +1,12 @@
+Note:
+You must create an APIKEY and insert it into these 3 files:
+
+addParent2Teen.html:        rpcUrls: { default: { http: ['https://sepolia.infura.io/v3/APIKEY'] } }
+addParent2Teen.html:                rpcUrls: ['https://sepolia.infura.io/v3/APIKEY'],
+
+usePYUSDtokens.html:        rpcUrls: { default: { http: ['https://sepolia.infura.io/v3/APIKEY'] } }
+usePYUSDtokens.html:                rpcUrls: ['https://sepolia.infura.io/v3/APIKEY'],
+
+useTSTtokens.html:        rpcUrls: { default: { http: ['https://sepolia.infura.io/v3/APIKEY'] } }
+useTSTtokens.html:                rpcUrls: ['https://sepolia.infura.io/v3/APIKEY'],
+
